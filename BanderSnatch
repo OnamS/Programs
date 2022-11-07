@@ -1,0 +1,72 @@
+from operator import truediv
+from tkinter import E
+import networkx as nx
+# import matplotlib.pyplot as plot
+G=nx.DiGraph()
+G.add_edges_from([
+    ('A','B',{"op":"Join Red"}),
+    ('A','D',{"op":"Join Blue"}),
+    ('B','D',{"op":"choice 3"}),
+    ('D','A',{"op":"choice 4"}),
+    ('B','E',{"op":"Get the crown."}),
+    ('E','I',{"op":"Dont change side from red to blue."}),
+    ('E','G',{"op":"Change side from red to blue."}),
+    ('G','H',{"op":"Battle for Whiterun as Blue."}),
+    ('I','H',{"op":"Battle for whiterun as red."}),
+
+])
+G.add_nodes_from([
+    ('A',{"prompt":"Start with prisoner escort. And convince to change side"}),
+    ('B',{"prompt":"Joined red side. Escape with hadvar"}),
+    ('C',{"prompt":"Event 3","win":"Win"}),
+    ('D',{"prompt":"Joined Blue side. Escape with Ralof"}),
+    ('E',{"prompt":"Get the Crown for red side"}),
+    ('I',{"prompt":"Dont change side to blue."})
+    ('F',{"prompt":"Change side from red to blue"}),
+    ('G',{"prompt":"Join Blue and prove loyalty."}),
+    ('H',{"prompt":"Battle for Whiterun as Red"}),
+    ('J',{"prompt":"As Red: Choice for next city."})
+
+
+])
+pos=nx.spring_layout(G)
+nx.draw_networkx_nodes(G,pos,node_size=500)
+nx.draw_networkx_edges(G,pos,edgelist=G.edges(),edge_color='black')
+nx.draw_networkx_labels(G,pos)
+# plot.show()
+def display_prompt(current_node):
+    print(G._node[current_node]["prompt"])
+    
+def display_choices(current_node):
+    e=(G.edges(current_node))
+    option_list=[]
+    node_list=[]
+    i=1
+    for op in e:
+        option_list.append((G.get_edge_data(op[0],op[1])["op"]))#(A,B,dict)
+        node_list.append(op[1])#A->B, A->C [B,C]
+        
+    if option_list:
+        for o in option_list:
+            print(str(i)+") "+o)
+            i+=1
+        current_node=input_choice(option_list,node_list)
+        return current_node
+    else:
+        if G._node[current_node]["win"]=="Win":
+            print("YOU WIN!")
+        else:
+            print("YOU LOSE!")
+        return None
+def input_choice(option_list,node_list):
+    #print(option_list)
+    choice=(input("Enter choice\n"))#maintain2 lists one for nodes, one for options.
+    ch=option_list.index(choice)
+    return(node_list[ch])
+#print(G.edges(node.index))
+current_node='A'
+while(True):
+    display_prompt(current_node)
+    current_node=display_choices(current_node)
+    if not current_node:
+        break
