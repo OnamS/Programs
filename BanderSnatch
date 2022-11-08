@@ -1,39 +1,74 @@
 from operator import truediv
 from tkinter import E
 import networkx as nx
-# import matplotlib.pyplot as plot
+import matplotlib.pyplot as plot
 G=nx.DiGraph()
 G.add_edges_from([
-    ('A','B',{"op":"Join Red"}),
-    ('A','D',{"op":"Join Blue"}),
-    ('B','D',{"op":"choice 3"}),
-    ('D','A',{"op":"choice 4"}),
-    ('B','E',{"op":"Get the crown."}),
-    ('E','I',{"op":"Dont change side from red to blue."}),
-    ('E','G',{"op":"Change side from red to blue."}),
-    ('G','H',{"op":"Battle for Whiterun as Blue."}),
-    ('I','H',{"op":"Battle for whiterun as red."}),
+    ('A','Join Blue',{"op":"Join Blue."}),
+    ('A','Stay in Red',{"op":"Stay in Red"}),
+    ('Join Blue','Blue to Red',{"op":"Change side"}),
+    ('Red to Blue','Battle for Whiterun as Blue',{"op":"Whiterun as blue."}),
+    ('Join Blue','Battle for Whiterun as Blue',{"op":"Dont change from blue to red"}),
+    ('Battle for Whiterun as Blue','Choose next city as Blue',{"op":"New City Takeover."}),
+    ('Choose next city as Blue','Choose Markarth',{"op":"Markarth Questline."}),
+    ('Choose next city as Blue','Choose Morthal',{"op":"Morthal Questline."}),
+    ('Choose next city as Blue','Choose Falkreath',{"op":"Falkreath Questline."}),
+    ('Choose next city as Blue','Choose Solitude',{"op":"Final Battle Preparation."}),
+    ('Choose Markarth','Choose next city as Blue',{"op":"Display remaining choices"}),
+    ('Choose Morthal','Choose next city as Blue',{"op":"Display remaining choices"}),
+    ('Choose Falkreath','Choose next city as Blue',{"op":"Display remaining choices"}),
+    ('Choose Solitude','Kill Tulius',{"op":"Deliver the final blow."}),
+    ('Choose Solitude','Leave Tulius',{"op":"Let someone else deliver the final blow."}),
+    ('Kill Tulius','FINAL CHOICE',{"op":"Finish the game."}),
+    ('Leave Tulius','FINAL CHOICE',{"op":"Finish the game."}),
 
+
+    ('Stay in Red','Red to Blue',{"op":"Change side"}),
+    ('Blue to Red','Battle for Whiterun as Red',{"op":"Whiterun as red."}),
+    ('Stay in Red','Battle for Whiterun as Red',{"op":"Dont change from blue to red"}),
+    ('Battle for Whiterun as Red','Choose next city as Red',{"op":"New City Takeover."}),
+    ('Choose next city as Red','Choose Riften',{"op":"Riften Questline."}),
+    ('Choose next city as Red','Choose Dawnstar',{"op":"Dawnstar Questline."}),
+    ('Choose next city as Red','Choose Winterhold',{"op":"Winterhold Questline."}),
+    ('Choose next city as Red','Choose Windhelm',{"op":"Final Battle Preparation."}),
+    ('Choose Riften','Choose next city as Red',{"op":"Display remaining choices"}),
+    ('Choose Dawnstar','Choose next city as Red',{"op":"Display remaining choices"}),
+    ('Choose Winterhold','Choose next city as Red',{"op":"Display remaining choices"}),
+    ('Choose Windhelm','Kill Ulfric',{"op":"Deliver the final blow."}),
+    ('Choose Windhelm','Leave Ulfric',{"op":"Let someone else deliver the final blow."}),
+    ('Kill Ulfric','FINAL CHOICE',{"op":"Finish the game."}),
+    ('Leave Ulfric','FINAL CHOICE',{"op":"Finish the game."}),
 ])
 G.add_nodes_from([
-    ('A',{"prompt":"Start with prisoner escort. And convince to change side"}),
-    ('B',{"prompt":"Joined red side. Escape with hadvar"}),
-    ('C',{"prompt":"Event 3","win":"Win"}),
-    ('D',{"prompt":"Joined Blue side. Escape with Ralof"}),
-    ('E',{"prompt":"Get the Crown for red side"}),
-    ('I',{"prompt":"Dont change side to blue."})
-    ('F',{"prompt":"Change side from red to blue"}),
-    ('G',{"prompt":"Join Blue and prove loyalty."}),
-    ('H',{"prompt":"Battle for Whiterun as Red"}),
-    ('J',{"prompt":"As Red: Choice for next city."})
+    ('A',{"prompt":"Start while escorting prisoners."}),
+    ('Join Blue',{"prompt":"Prove loyalty. Get the Crown. Change side prompt"}),
+    ('Blue to Red',{"prompt":"Orive loyalty to red."}),
+    ('Battle for Whiterun as Blue',{"prompt":"Battle Event as Blue., Promotion as Blue."}),
+    ('Choose next city as Blue',{"prompt":"Choice Screen."}),
+    ('Choose Markarth',{"prompt":"Put in Markarth Questline."}),
+    ('Choose Morthal',{"prompt":"Put in Morthal Questline."}),
+    ('Choose Falkreath',{"prompt":"Put in Falkreath Questline."}),
+    ('Choose Solitude',{"prompt":"Prepare. Listen to speech. Invade Solitude."}),
+    ('Kill Tulius',{"prompt":"Land the final blow. Listen to victory Speech"}),
+    ('Leave Tulius',{"prompt":"Let someone else land the final blow. Listen to victory Speech"}),
 
-
+    ('Stay in Red',{"prompt":"Prove loyalty. Get the Crown. Change side prompt"}),
+    ('Red to Blue',{"prompt":"Prove oyalty to Blue."}),
+    ('Battle for Whiterun as Red',{"prompt":"Battle Event as Blue., Promotion as Blue."}),
+    ('Choose next city as Red',{"prompt":"Choice Screen."}),
+    ('Choose Riften',{"prompt":"Put in Riften Questline."}),
+    ('Choose Dawnstar',{"prompt":"Put in Dawnstar Questline."}),
+    ('Choose Winterhold',{"prompt":"Put in Winterhold Questline."}),
+    ('Choose Windhelm',{"prompt":"Prepare. Listen to speech. Invade Windhelm."}),
+    ('Kill Ulfric',{"prompt":"Land the final blow. Listen to victory Speech"}),
+    ('Leave Ulfric',{"prompt":"Let someone else land the final blow. Listen to victory Speech"}),
+    ('FINAL CHOICE',{"prompt":"Final Credits.","win":"Win"})
 ])
 pos=nx.spring_layout(G)
 nx.draw_networkx_nodes(G,pos,node_size=500)
 nx.draw_networkx_edges(G,pos,edgelist=G.edges(),edge_color='black')
 nx.draw_networkx_labels(G,pos)
-# plot.show()
+plot.show()
 def display_prompt(current_node):
     print(G._node[current_node]["prompt"])
     
@@ -59,7 +94,7 @@ def display_choices(current_node):
             print("YOU LOSE!")
         return None
 def input_choice(option_list,node_list):
-    #print(option_list)
+    print(option_list)
     choice=(input("Enter choice\n"))#maintain2 lists one for nodes, one for options.
     ch=option_list.index(choice)
     return(node_list[ch])
