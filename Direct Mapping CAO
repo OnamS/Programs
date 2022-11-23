@@ -1,0 +1,28 @@
+import java.util.*;
+
+public class Main
+{
+	public static void main(String[] args) {
+		Scanner sc = new Scanner (System.in);
+		System.out.println("Enter Cache size");
+		int cachesize = sc.nextInt();
+		String cache = Integer.toBinaryString(cachesize);
+		int clen = cache.length();
+		System.out.println("Enter the block number");
+		int choice = sc.nextInt();
+	    String chbin = Integer.toBinaryString(choice);
+	    int chlen = chbin.length();
+	    while (chlen<clen)
+	    {
+	        chbin = "0"+chbin;
+	        chlen = chbin.length();
+	    }
+	    String answer="";
+	    for (int i=chlen-clen+1;i<chlen;i++)
+	    {
+	        answer = answer + chbin.charAt(i);
+	    }
+	    int ans = Integer.parseInt(answer,2);
+	    System.out.println(answer+"\n"+ans);
+	}
+}
